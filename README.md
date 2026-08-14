@@ -1,241 +1,285 @@
-# Obsidian CAD Preview (Siemens NX PRT / STEP / JT)
+# Obsidian CAD Preview
 
-[![Obsidian Plugin](https://img.shields.io/badge/Obsidian-Plugin-blueviolet.svg?style=flat-square&logo=obsidian)](https://obsidian.md)
+Interactive 3D CAD viewer for **Siemens NX (`.prt`)**, **STEP (`.step`, `.stp`)**, and **JT (`.jt`)** files directly inside Obsidian notes.
+
+[![Obsidian Plugin](https://img.shields.io/badge/Obsidian-v1.4%2B-purple.svg?style=flat-square&logo=obsidian)](https://obsidian.md)
 [![Three.js](https://img.shields.io/badge/Three.js-r170-black.svg?style=flat-square&logo=three.js)](https://threejs.org/)
 [![.NET](https://img.shields.io/badge/.NET-8.0-512BD4.svg?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.3-3178C6.svg?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
 
-Встроенный высокопроизводительный интерактивный 3D CAD-просмотрщик для заметок **Obsidian**.
-Позволяет бесшовно открывать, исследовать и анализировать инженерные модели форматов **Siemens NX (`.prt`)**, **STEP (`.step`, `.stp`)** и **JT (`.jt`)** прямо в Markdown-документах через стандартные ссылки `![[model.prt]]` или специализированные CAD-блоки кода.
+---
+
+## ⚡ Quick Start (5 minutes)
+
+### Recommended: Install into Obsidian Vault
+
+1. Download the latest release archive (`obsidian-cad-preview.zip`).
+2. Extract the contents into your vault's plugin directory:
+   ```text
+   <Your-Vault>/.obsidian/plugins/obsidian-cad-preview/
+   ├── main.js
+   ├── manifest.json
+   ├── styles.css
+   └── bin/
+       └── bridge/
+           ├── cad-preview-bridge.exe
+           └── NxScripts/
+   ```
+3. Open **Obsidian → Settings → Community Plugins**, reload plugins, and enable **CAD Preview**.
+4. Put any `.prt`, `.step`, or `.jt` file in your vault (e.g., `Models/Bracket.step`).
+5. Open any note and insert:
+   ```markdown
+   ![[Models/Bracket.step]]
+   ```
+6. The interactive 3D model renders immediately in your note.
 
 ---
 
-## 🌟 Ключевые возможности
+## 🎯 Why CAD Preview?
 
-### 1. Бесшовная интеграция в Obsidian Markdown
-- **Стандартный Markdown-синтаксис**: вставка через вики-ссылки `![[Models/Gearbox.prt]]`.
-- **Поддержка псевдонимов (alias)**: `![[Models/Assembly.prt|Редуктор узла в сборе]]`.
-- **Настройка размеров карточки**: 
-  - `![[Assembly.prt|800x500]]`
-  - `![[Assembly.prt|width=100%|height=600]]`
-  - `![[Assembly.prt|thumbnail]]` (режим компактной миниатюры).
-- **Специализированный блок кода ` ```cad `**: тонкое конфигурирование ракурса, проекции, качества и стилей в YAML-подобном формате.
-- **Два режима отображения**: бесшовная работа внутри заметок (**Live Preview** и **Reading View**) и открытие 3D-модели в **отдельной вкладке Obsidian** в виде полноэкранного рабочего пространства.
+Engineers and hardware designers documenting assemblies in Obsidian traditionally had to rely on static 2D screenshots. Every design revision required manual re-exporting, cropping, and re-inserting images.
 
-### 2. Интерактивная 3D-сцена (Three.js WebGL)
-- **Плавная навигация (OrbitControls)**:
-  - Вращение: **Левая кнопка мыши (ЛКМ)**.
-  - Панорамирование: **Правая кнопка мыши (ПКМ)** или **Shift + ЛКМ**.
-  - Масштабирование: **Колесо мыши**.
-  - Автоподгонка (Fit): **Двойной клик** по сцене или кнопка `Fit`.
-- **Инженерные стандартные виды**: быстрое переключение камеры в один клик: `ISO` (Изометрия), `FRONT` (Спереди), `BACK` (Сзади), `TOP` (Сверху), `BOTTOM` (Снизу), `LEFT` (Слева), `RIGHT` (Справа).
-- **Проекции камеры**: мгновенное переключение между **Ортогональной** (инженерная проекция без перспективных искажений) и **Перспективной**.
-- **Стили рендеринга**:
-  - *Shaded with Edges* — фотореалистичное затенение с четким акцентированием острых кромок и контуров геометрии.
-  - *Shaded* — классический гладкий рендеринг материалов.
-  - *Wireframe* — каркасный режим триангуляции.
-- **Адаптивная тема**: фон 3D сцены автоматически подстраивается под светлую и темную темы Obsidian.
-
-### 3. Инженерный инструментарий анализа
-- **Интерактивное дерево сборки (`ModelTree`)**:
-  - Иерархическая структура деталей и тел (Body / Component).
-  - Управление видимостью отдельных деталей (👁️ Включить/Скрыть).
-  - Режим изоляции деталей (🔍 Изолировать выбранное тело).
-  - Двусторонняя синхронизация: выбор узла в дереве подсвечивает деталь на 3D-сцене и наоборот.
-- **Выделение и Ghost-режим**: подсветка активной детали ярким акцентом с возможностью полупрозрачного затемнения остальных компонентов сборки.
-- **Динамическое сечение (`Section Plane`)**:
-  - Рассечение модели плоскостями по осям **X**, **Y**, **Z**.
-  - Плавный слайдер положения плоскости рассечения.
-  - Кнопка инвертирования вектора нормали сечения.
-- **3D-измерение расстояний (`Measurement Tool`)**:
-  - Интерактивный клик по 2 точкам на геометрии с привязкой и маркерами.
-  - Отрисовка пространственного 3D-отрезка с точным расчетом расстояния в физических единицах модели (например, `45.20 mm`).
-- **Инспектор свойств и метаданных**:
-  - Габаритные размеры ($X \times Y \times Z$ Bounding Box).
-  - Физические свойства (масса, объем, плотность, назначенный материал).
-  - Статистика полигонов (количество вершин и треугольников).
-- **Быстрый запуск Siemens NX**: кнопка **↗ NX** в верхнем углу для моментального открытия текущей детали или сборки в настольном приложении Siemens NX (`ugraf.exe`).
-- **Полноэкранный режим (Full Screen)**: развертывание 3D-сцены на весь монитор.
-
-### 4. Производительность и интеллектуальное кэширование
-- **Двухуровневый кэш предпросмотра**:
-  - Вычисление уникального SHA-256 хеша от абсолютного пути, размера файла, времени последней модификации (mtime) и настроек качества тесселяции.
-  - Время повторного открытия моделей из локального кэша — **300–500 мс**.
-- **Фоновый наблюдатель (File Watcher)**: автоматическая перезагрузка и обновление 3D-сцены в Obsidian при сохранении изменений в Siemens NX (с debounce-фильтрацией).
-- **Очередь фоновых задач**: предотвращение зависания интерфейса и контроль нагрузки на лицензии и CPU.
+**Obsidian CAD Preview eliminates this friction:**
+- **Live 3D Embedding**: Embed native CAD models with standard Obsidian wiki-links `![[model.prt]]` or customizable ` ```cad ` code blocks.
+- **Full Engineering Toolkit**: Inspect assembly trees, isolate parts, cut dynamic section planes, measure 3D point-to-point distances, and inspect physical properties.
+- **Fast Local Caching**: Deterministic SHA-256 fingerprinting renders cached models in **under 300 ms**.
+- **Bidirectional NX Sync**: Auto-detects local Siemens NX installations (`NX 11` through `NX 2512+`) and updates previews in the background whenever you save in NX.
+- **Zero External Dependencies for STEP & JT**: Built-in parsers convert STEP and JT files standalone without needing CAD licenses.
 
 ---
 
-## 🏛 Архитектура решения
+## 🚀 Key Features
 
-```mermaid
-flowchart TD
-    subgraph Obsidian ["Obsidian Environment"]
-        Note["Markdown Note<br/>![[model.prt]] / ```cad"] --> PM["Preview Manager"]
-        PM --> CacheCheck{"Проверка кэша<br/>(SHA-256 Hash)"}
-        
-        CacheCheck -- "Hit (Валиден)" --> GLBLoad["Быстрая загрузка GLB<br/>(300-500 ms)"]
-        CacheCheck -- "Miss / Изменен" --> BridgeQueue["Очередь заданий Bridge"]
-        
-        GLBLoad --> ThreeJS["Three.js WebGL Engine<br/>• OrbitControls • Section • Measure<br/>• Model Tree • Edges"]
-    end
+| Capability | Description |
+|---|---|
+| **Markdown Integration** | Embed via `![[model.prt]]`, custom dimensions `![[model.prt\|800x500]]`, aliases `![[model.prt\|Gearbox]]`, or `thumbnail` mode. |
+| **Interactive 3D Canvas** | Three.js WebGL viewport with OrbitControls, 7 standard engineering views (`ISO`, `FRONT`, `TOP`, `RIGHT`, etc.), and Orthographic/Perspective toggles. |
+| **Rendering Modes** | *Shaded with Edges* (sharp edge enhancement), *Shaded*, and *Wireframe*. Theme-aware background matching Obsidian light/dark mode. |
+| **Assembly Tree (`ModelTree`)** | Hierarchical component tree with two-way selection sync, visibility toggles (👁️), and part isolation (🔍). |
+| **Dynamic Section Plane** | Real-time X/Y/Z cutting planes with position slider and normal flipping. |
+| **3D Distance Measurement** | Click two points on geometry to calculate spatial distances in physical model units (mm/in). |
+| **Property Inspector** | View bounding boxes ($X \times Y \times Z$), mass, volume, material metadata, and triangle counts. |
+| **Desktop NX Integration** | One-click **↗ NX** button to launch the original model directly in Siemens NX (`ugraf.exe`). |
 
-    subgraph Bridge [".NET 8 CAD Bridge"]
-        BridgeQueue --> BridgeExe["cad-preview-bridge.exe"]
-        BridgeExe --> NXDet["NxDetector<br/>(Registry / ENV / Paths)"]
-        NXDet --> NXRun["NxRunner (Batch / Journal / CLI)"]
-        BridgeExe --> StepJt["Встроенные парсеры<br/>STEP / JT / Standalone PRT"]
-    end
+---
 
-    subgraph SiemensNX ["Siemens NX"]
-        NXRun --> NXApp["ugraf.exe / run_journal.exe"]
-        NXApp --> NXOpen["NXOpen Export Scripts<br/>(B-Rep Faceting -> GLB)"]
-    end
+## 💻 Usage & Syntax Examples
 
-    NXOpen --> CacheStore[".cad-preview/<br/>model.glb + metadata.json"]
-    StepJt --> CacheStore
-    CacheStore --> GLBLoad
+### 1. Standard Wiki-Link Embeds
+
+```markdown
+<!-- Standard full-width embed -->
+![[Models/Housing.prt]]
+
+<!-- Embed with alias title -->
+![[Models/Assembly.prt|Gearbox Assembly v2]]
+
+<!-- Custom fixed dimensions (Width x Height in px) -->
+![[Models/Rotor.step|640x480]]
+
+<!-- Percentage width and explicit height -->
+![[Models/Bracket.prt|width=100%|height=550]]
+
+<!-- Compact thumbnail card -->
+![[Models/Machine.jt|thumbnail]]
 ```
 
----
+### 2. Dedicated ` ```cad ` Code Block
 
-## 📋 Синтаксис использования
+For fine-grained control over camera angle, projection, and quality presets:
 
-### 1. Стандартные вставки через вики-ссылки
-
-| Синтаксис | Описание |
-|---|---|
-| `![[Models/Bracket.prt]]` | Стандартная вставка детали Siemens NX |
-| `![[Assembly.prt\|Редуктор]]` | Вставка с отображаемым заголовком |
-| `![[Housing.prt\|640x480]]` | Вставка с фиксированными размерами |
-| `![[Housing.prt\|width=100%\|height=500]]` | Вставка с процентной шириной и высотой в px |
-| `![[Rotor.step\|thumbnail]]` | Режим компактной карточки-миниатюры |
-| `![[Machine.jt]]` | Вставка легковесного формата JT |
-
-### 2. Расширенный блок кода ```cad
-
+````markdown
 ```cad
-file: Models/1 часть кондуктора.prt
+file: Models/Assembly.prt
 width: 100%
-height: 550px
+height: 500px
 view: iso
 projection: orthographic
 quality: normal
 edges: true
 theme: auto
 ```
+````
 
-#### Доступные параметры блока `cad`:
-- `file` / `model` / `path`: путь к файлу CAD относительно корня хранилища или абсолютный путь.
-- `width`: ширина контейнера (`100%`, `800px` и т.д., по умолчанию `100%`).
-- `height`: высота контейнера (`500px`, `400` и т.д., по умолчанию `450px`).
-- `view`: начальный ракурс (`iso`, `front`, `back`, `top`, `bottom`, `left`, `right`).
-- `projection`: тип проекции (`orthographic` или `perspective`).
-- `quality`: качество тесселяции (`draft`, `normal`, `high`, `ultra`).
-- `edges`: отображение кромок (`true` / `false`).
-- `theme`: цветовая тема фона (`auto`, `dark`, `light`).
+#### Code Block Parameters:
+- `file` / `model` / `path` *(required)*: Relative vault path or absolute path to the CAD file.
+- `width` *(optional, default `100%`)*: Container width (`100%`, `800px`, `600`).
+- `height` *(optional, default `450px`)*: Container height (`450px`, `500`).
+- `view` *(optional, default `iso`)*: Initial camera orientation (`iso`, `front`, `back`, `top`, `bottom`, `left`, `right`).
+- `projection` *(optional, default `orthographic`)*: Camera mode (`orthographic` or `perspective`).
+- `quality` *(optional, default `normal`)*: Tessellation fidelity (`draft`, `normal`, `high`, `ultra`).
+- `edges` *(optional, default `true`)*: Outline sharp feature edges (`true` or `false`).
+- `theme` *(optional, default `auto`)*: Viewport background (`auto`, `dark`, `light`).
+
+### 3. Separate Workspace Tab
+
+Clicking any CAD file in the Obsidian file explorer opens a dedicated full-tab 3D workspace leaf (`VIEW_TYPE_CAD`).
 
 ---
 
-## ⌨️ Управление 3D-сценой
+## 🎮 Viewport Navigation & Controls
 
-| Действие | Управление мышью / клавиатурой |
+| Action | Control |
 |---|---|
-| **Вращение камеры** | Зажать **ЛКМ** + перемещение мыши |
-| **Панорамирование (Pan)** | Зажать **ПКМ** или **Shift + ЛКМ** + перемещение мыши |
-| **Масштабирование (Zoom)** | **Колесо мыши** |
-| **Автоподгонка (Fit All)** | **Двойной клик ЛКМ** по сцене или кнопка `Fit` на панели |
-| **Стандартные виды** | Кнопки `ISO`, `FRONT`, `TOP`, `RIGHT` на панели управления |
-| **Выделение детали** | Одиночный **клик ЛКМ** по детали |
-| **Дерево модели / сборок** | Кнопка **📦** в правом нижнем углу |
-| **Свойства и габариты** | Кнопка **ℹ️** в правом нижнем углу |
-| **Сечение модели (Section)** | Кнопка **✂️** — выбор плоскости X / Y / Z и слайдер |
-| **3D-измерения (Measure)** | Кнопка **📏** — последовательный клик по двум точкам на геометрии |
-| **Открыть в Siemens NX** | Кнопка **↗ NX** в правом верхнем углу карточки |
-| **Полноэкранный режим** | Кнопка **⛶** в правом верхнем углу карточки |
+| **Rotate** | Click & drag **Left Mouse Button (LMB)** |
+| **Pan** | Click & drag **Right Mouse Button (RMB)** or **Shift + LMB** |
+| **Zoom** | **Mouse Wheel** scroll |
+| **Fit to View** | **Double-click** canvas or click `Fit` button on toolbar |
+| **Standard Views** | Click `ISO`, `FRONT`, `TOP`, `RIGHT` on the bottom toolbar |
+| **Select Part** | **Click (LMB)** directly on any 3D component |
+| **Assembly Tree** | Click **📦** icon in bottom-right corner |
+| **Model Properties** | Click **ℹ️** icon in bottom-right corner |
+| **Section Plane** | Click **✂️** icon → select axis (X/Y/Z) and adjust slider |
+| **Measure Distance** | Click **📏** icon → click Point 1, then click Point 2 on model surfaces |
+| **Open in Siemens NX** | Click **↗ NX** icon in top-right header |
+| **Fullscreen** | Click **⛶** icon in top-right header |
 
 ---
 
-## ⚙️ Конфигурация и настройки плагина
+## ⚙️ Plugin Configuration
 
-В разделе **Настройки Obsidian → CAD Preview** доступны следующие параметры:
+Configurable via **Obsidian Settings → CAD Preview**:
 
-1. **Каталог Siemens NX**:
-   - Кнопка **«Автодетекция»**: автоматически находит установленный NX через реестр Windows (`SOFTWARE\Siemens\NX`), переменные среды (`UGII_BASE_DIR`, `NX_DIR`) и стандартные пути `C:\Program Files\Siemens\NX*`.
-   - Кнопка **«Проверить NX»**: выполняет тестовый вызов NX для проверки доступности пакетного экспорта.
-2. **Качество тесселяции по умолчанию**: выбор между `Draft`, `Normal`, `High`, `Ultra`.
-3. **Стандартный вид камеры**: `Isometric`, `Front`, `Top`, `Right`.
-4. **Проекция камеры**: `Ортогональная` (рекомендуется для CAD) или `Перспективная`.
-5. **Отображение рёбер (Shaded with Edges)**: подчеркивание линий перегиба граней.
-6. **Автоматическое обновление**: отслеживание изменений на диске и обновление предпросмотра при сохранении в NX.
-7. **Управление кэшем**: отображение общего объема кэша и кнопка полной очистки.
-8. **Расширенные параметры (Advanced)**:
-   - Таймаут конвертации NX (15–600 сек).
-   - Количество параллельных воркеров (по умолчанию 1).
-   - Порог предупреждения для высокополигональных моделей.
+| Setting | Default | Description |
+|---|---|---|
+| **Siemens NX Directory** | Auto-detected | Base directory of Siemens NX (e.g. `C:\Program Files\Siemens\NX2512`). Includes **Auto-detect** and **Test NX** buttons. |
+| **Tessellation Quality** | `normal` | Default mesh resolution (`draft`, `normal`, `high`, `ultra`). |
+| **Default Camera View** | `iso` | Initial orientation on load (`iso`, `front`, `top`, `right`). |
+| **Camera Projection** | `orthographic` | `orthographic` (engineering CAD standard) or `perspective`. |
+| **Show Edges** | `true` | Enhances boundary and crease edges on geometry. |
+| **Auto Update** | `true` | Watches CAD files and refreshes previews when modified in external CAD tools. |
+| **Cache Management** | — | Displays total cache disk usage with one-click **Clear Cache** action. |
+| **Conversion Timeout** | `120s` | Maximum execution time allowed for external NX batch exporter (15–600s). |
+| **Max Concurrent Workers**| `1` | Number of simultaneous background conversion processes. |
+| **Triangle Warning Threshold** | `500000` | Polycount limit before displaying performance advisory on complex models. |
 
 ---
 
-## 💻 Автономная CLI-утилита `cad-preview-bridge`
+## 🛠 Standalone CLI Tool: `cad-preview-bridge`
 
-Модуль моста (.NET 8) может запускаться независимо из терминала для пакетной обработки и автоматизации:
+The `.NET 8` bridge executable (`bin/bridge/cad-preview-bridge.exe`) can be used independently for batch processing, automated pipelines, or headless conversion:
 
-```bash
-# Конвертация файла NX PRT / STEP / JT в GLB
+```powershell
+# Convert CAD file to GLB
 cad-preview-bridge convert Assembly.prt --output Assembly.glb --quality normal
 
-# Получение метаданных и физических свойств в формате JSON
-cad-preview-bridge inspect Assembly.prt
+# Inspect CAD file metadata
+cad-preview-bridge inspect Housing.prt
 
-# Диагностика и поиск установленных версий Siemens NX
+# Detect installed Siemens NX installations
 cad-preview-bridge test-nx
 
-# Генерация эталонных тестовых CAD-моделей
-cad-preview-bridge generate-test-models --output-dir ./models
+# Generate synthetic reference models for testing
+cad-preview-bridge generate-test-models --outdir ./models
 ```
 
 ---
 
-## 🛠 Сборка и разработка
+## 🏗 Architecture
 
-### Требования к окружению:
-- **Node.js**: версии 18+ и менеджер пакетов `npm`
-- **.NET SDK**: версия 8.0+
-- **Obsidian**: версия v1.4.0+
-- *(Опционально)* Установленный **Siemens NX** (версии NX 11 ... NX 2512+) для работы с нативными закрытыми B-Rep моделями PRT. STEP и JT обрабатываются автономно без внешних зависимостей.
+```mermaid
+flowchart TD
+    subgraph ObsidianApp ["Obsidian Desktop (Electron / Node.js)"]
+        UserNote["Markdown Note<br/>![[model.prt]] / ```cad"] --> PM["PreviewManager"]
+        PM --> Cache{"Cache Check<br/>(SHA-256 Key)"}
+        
+        Cache -- "Hit (<300ms)" --> LoadGLB["Direct GLB Loader"]
+        Cache -- "Miss / Changed" --> Bridge["CadBridge (.NET 8 Process)"]
+        
+        LoadGLB --> Renderer["Three.js WebGL Engine<br/>• OrbitControls • ModelTree • Section<br/>• Measurement • Edges • Properties"]
+    end
 
-### Шаги сборки:
+    subgraph BridgeSys ["CAD Bridge CLI & Background Worker"]
+        Bridge --> NxDetect["NxDetector<br/>(Registry / ENV / Standard Paths)"]
+        NxDetect --> EngineSelect{"Native NX<br/>Available?"}
+        
+        EngineSelect -- "Yes (PRT/STEP/JT)" --> NxRunner["NxRunner<br/>(run_journal.exe / ugraf.exe)"]
+        EngineSelect -- "No (STEP/JT fallback)" --> NativeParsers["Built-in Parsers<br/>(StepParser / JtParser / PrtParser)"]
+    end
 
-1. **Клонирование репозитория**:
-   ```bash
-   git clone https://github.com/Homiakus/obsidian-cad-view.git
-   cd obsidian-cad-view
-   ```
+    subgraph NXApp ["Siemens NX Environment"]
+        NxRunner --> Journal["ExportGlbJournal.cs / .py<br/>(B-Rep Faceting API)"]
+    end
 
-2. **Установка зависимостей и сборка плагина**:
-   ```bash
-   npm install
-   npm run build
-   ```
-
-3. **Сборка .NET Bridge**:
-   ```bash
-   dotnet publish bridge/CadPreviewBridge/CadPreviewBridge.csproj -c Release -r win-x64 --self-contained false -o bin/bridge
-   ```
-
-4. **Запуск автоматических тестов**:
-   ```bash
-   # Запуск интеграционных тестов плагина
-   node tests/plugin-tests.mjs
-
-   # Запуск C# тестов парсеров и экспортера GLB
-   dotnet run --project tests/CadPreviewTests/CadPreviewTests.csproj
-   ```
+    Journal --> OutputGLB[".cad-preview/<br/>model.glb + metadata.json"]
+    NativeParsers --> OutputGLB
+    OutputGLB --> LoadGLB
+```
 
 ---
 
-## 📄 Лицензия
+## 📋 System Requirements & Compatibility
 
-Проект распространяется под открытой лицензией [MIT](LICENSE).
-Разработано для сообщества инженеров и пользователей Obsidian.
+### Host Requirements
+- **Operating System**: Windows 10 / 11 (64-bit).
+- **Obsidian**: v1.4.0 or newer (Desktop).
+- **Runtime**: [.NET 8.0 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/8.0) (x64).
+
+### Supported CAD Formats & Software Matrix
+
+| Format | Standalone Mode | Siemens NX Integration | Status |
+|---|---|---|---|
+| **STEP (`.step`, `.stp`)** | ✅ Full support (ISO 10303-21) | ✅ Direct import / export | Verified |
+| **JT (`.jt`)** | ✅ Full support (ISO 14306) | ✅ Direct import / export | Verified |
+| **Siemens NX (`.prt`)** | ⚠️ Metadata & synthetic fallback | ✅ Full B-Rep tessellation & assembly structure | Verified (NX 11 – NX 2512+) |
+
+---
+
+## 🔨 Building from Source
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v18+) & `npm`
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+
+### 1. Build Obsidian Plugin
+```powershell
+# Clone the repository
+git clone https://github.com/Homiakus/obsidian-cad-view.git
+cd obsidian-cad-view
+
+# Install dependencies and build JS bundle
+npm install
+npm run build
+```
+
+### 2. Build .NET Bridge
+```powershell
+dotnet publish bridge/CadPreviewBridge/CadPreviewBridge.csproj `
+  -c Release `
+  -r win-x64 `
+  --self-contained false `
+  -o bin/bridge
+```
+
+### 3. Run Automated Tests
+```powershell
+# Run JavaScript plugin integration tests (18 tests)
+node tests/plugin-tests.mjs
+
+# Run .NET geometry, tessellation, and transform test suite (43 tests)
+dotnet run --project tests/CadPreviewTests/CadPreviewTests.csproj
+```
+
+---
+
+## ❓ Troubleshooting
+
+### 1. "Siemens NX not detected"
+- **Cause**: Siemens NX is installed in a non-standard directory or environment variables are missing.
+- **Fix**: Open **Obsidian Settings → CAD Preview**, and enter your NX path manually (e.g. `C:\Program Files\Siemens\NX2512`), then click **Проверить NX** (Test NX).
+
+### 2. "CAD Bridge executable not found"
+- **Cause**: The `bin/bridge/cad-preview-bridge.exe` file is missing from the plugin folder.
+- **Fix**: Ensure the `bin/` directory from the release archive was extracted alongside `main.js` and `manifest.json`.
+
+### 3. "Model displays as wireframe or white box"
+- **Cause**: Outdated graphics drivers or WebGL hardware acceleration disabled in Obsidian.
+- **Fix**: Verify WebGL is enabled in your GPU driver settings, and try toggling the projection mode (`Orthographic` vs `Perspective`).
+
+---
+
+## 📄 License
+
+This project is licensed under the [MIT License](LICENSE).
+Developed for the engineering and knowledge management community.
