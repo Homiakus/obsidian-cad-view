@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Build & Publish Release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Setup .NET 8.0 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Obsidian Plugin
+        run: npm run build
+
+      - name: Publish .NET CAD Bridge
+        run: |
+          dotnet publish bridge/CadPreviewBridge/CadPreviewBridge.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o bin/bridge
+
+      - name: Package Plugin Release Archive
+        shell: pwsh
+        run: |
+          $packageDir = "dist/obsidian-cad-preview"
+          New-Item -ItemType Directory -Force -Path "$packageDir/bin/bridge" | Out-Null
+          
+          Copy-Item "main.js" -Destination $packageDir
+          Copy-Item "manifest.json" -Destination $packageDir
+          Copy-Item "styles.css" -Destination $packageDir
+          Copy-Item "bin/bridge/cad-preview-bridge.exe" -Destination "$packageDir/bin/bridge/"
+          if (Test-Path "bin/bridge/NxScripts") {
+            Copy-Item "bin/bridge/NxScripts" -Destination "$packageDir/bin/bridge/" -Recurse
+          }
+          
+          Compress-Archive -Path "$packageDir/*" -DestinationPath "obsidian-cad-preview.zip" -Force
+          Write-Host "Created obsidian-cad-preview.zip successfully."
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Release ${{ github.ref_name }}"
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+          files: |
+            main.js
+            manifest.json
+            styles.css
+            obsidian-cad-preview.zip

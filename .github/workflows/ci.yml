@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    name: Build & Test (Plugin + CAD Bridge)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "npm"
+
+      - name: Setup .NET 8.0 SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build Obsidian Plugin
+        run: npm run build
+
+      - name: Run JavaScript Plugin Tests
+        run: node tests/plugin-tests.mjs
+
+      - name: Build .NET CAD Bridge
+        run: dotnet build bridge/CadPreviewBridge/CadPreviewBridge.csproj -c Release
+
+      - name: Run .NET CAD Preview Automated Tests
+        run: dotnet run --project tests/CadPreviewTests/CadPreviewTests.csproj -c Release
