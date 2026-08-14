@@ -1,0 +1,182 @@
+{
+  "source": "assembly-simple.prt",
+  "format": "prt",
+  "units": "mm",
+  "generatedAt": "2026-08-14T08:40:14.9463014Z",
+  "sourceMtime": 1786696814,
+  "sourceSize": 82,
+  "converterVersion": 1,
+  "nxVersion": "NX 2512",
+  "componentCount": 4,
+  "bodyCount": 4,
+  "triangleCount": 164,
+  "boundingBox": {
+    "min": [
+      -60,
+      -45,
+      -25
+    ],
+    "max": [
+      60,
+      45,
+      25
+    ],
+    "size": [
+      120,
+      90,
+      50
+    ]
+  },
+  "assemblyTree": {
+    "id": "asm_root",
+    "name": "assembly-simple",
+    "nxId": null,
+    "type": "assembly",
+    "transform": null,
+    "visible": true,
+    "color": null,
+    "material": null,
+    "density": null,
+    "mass": null,
+    "children": [
+      {
+        "id": "sub_frame",
+        "name": "Frame Assembly",
+        "nxId": null,
+        "type": "assembly",
+        "transform": null,
+        "visible": true,
+        "color": null,
+        "material": null,
+        "density": null,
+        "mass": null,
+        "children": [
+          {
+            "id": "base",
+            "name": "Base Bed",
+            "nxId": null,
+            "type": "component",
+            "transform": null,
+            "visible": true,
+            "color": null,
+            "material": null,
+            "density": null,
+            "mass": null,
+            "children": [],
+            "meshIndex": 0
+          },
+          {
+            "id": "plate_l",
+            "name": "Left Plate",
+            "nxId": null,
+            "type": "component",
+            "transform": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              -45,
+              0,
+              35,
+              1
+            ],
+            "visible": true,
+            "color": null,
+            "material": null,
+            "density": null,
+            "mass": null,
+            "children": [],
+            "meshIndex": 1
+          },
+          {
+            "id": "plate_r",
+            "name": "Right Plate",
+            "nxId": null,
+            "type": "component",
+            "transform": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              45,
+              0,
+              35,
+              1
+            ],
+            "visible": true,
+            "color": null,
+            "material": null,
+            "density": null,
+            "mass": null,
+            "children": [],
+            "meshIndex": 2
+          }
+        ],
+        "meshIndex": null
+      },
+      {
+        "id": "sub_drive",
+        "name": "Drive Mechanism",
+        "nxId": null,
+        "type": "assembly",
+        "transform": null,
+        "visible": true,
+        "color": null,
+        "material": null,
+        "density": null,
+        "mass": null,
+        "children": [
+          {
+            "id": "shaft",
+            "name": "Main Rotor Shaft",
+            "nxId": null,
+            "type": "component",
+            "transform": [
+              1,
+              0,
+              0,
+              0,
+              0,
+              6.123233995736766E-17,
+              1,
+              0,
+              0,
+              -1,
+              6.123233995736766E-17,
+              0,
+              0,
+              0,
+              45,
+              1
+            ],
+            "visible": true,
+            "color": null,
+            "material": null,
+            "density": null,
+            "mass": null,
+            "children": [],
+            "meshIndex": 3
+          }
+        ],
+        "meshIndex": null
+      }
+    ],
+    "meshIndex": null
+  }
+}

@@ -1,0 +1,138 @@
+{
+  "source": "colored.prt",
+  "format": "prt",
+  "units": "mm",
+  "generatedAt": "2026-08-14T08:14:51.1788754Z",
+  "sourceMtime": 1786695291,
+  "sourceSize": 74,
+  "converterVersion": 1,
+  "nxVersion": "NX 2512",
+  "componentCount": 3,
+  "bodyCount": 3,
+  "triangleCount": 120,
+  "boundingBox": {
+    "min": [
+      -20,
+      -20,
+      -15
+    ],
+    "max": [
+      20,
+      20,
+      15
+    ],
+    "size": [
+      40,
+      40,
+      30
+    ]
+  },
+  "assemblyTree": {
+    "id": "root",
+    "name": "colored",
+    "nxId": null,
+    "type": "assembly",
+    "transform": null,
+    "visible": true,
+    "color": null,
+    "material": null,
+    "density": null,
+    "mass": null,
+    "children": [
+      {
+        "id": "c1",
+        "name": "Body A (Red)",
+        "nxId": null,
+        "type": "body",
+        "transform": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          -25,
+          0,
+          0,
+          1
+        ],
+        "visible": true,
+        "color": null,
+        "material": null,
+        "density": null,
+        "mass": null,
+        "children": [],
+        "meshIndex": 0
+      },
+      {
+        "id": "c2",
+        "name": "Body B (Blue)",
+        "nxId": null,
+        "type": "body",
+        "transform": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          25,
+          0,
+          0,
+          1
+        ],
+        "visible": true,
+        "color": null,
+        "material": null,
+        "density": null,
+        "mass": null,
+        "children": [],
+        "meshIndex": 1
+      },
+      {
+        "id": "c3",
+        "name": "Body C (Transparent Cover)",
+        "nxId": null,
+        "type": "body",
+        "transform": [
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          25,
+          1
+        ],
+        "visible": true,
+        "color": null,
+        "material": null,
+        "density": null,
+        "mass": null,
+        "children": [],
+        "meshIndex": 2
+      }
+    ],
+    "meshIndex": null
+  }
+}

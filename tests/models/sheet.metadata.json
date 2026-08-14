@@ -1,0 +1,44 @@
+{
+  "source": "sheet.prt",
+  "format": "prt",
+  "units": "mm",
+  "generatedAt": "2026-08-14T08:14:51.1769843Z",
+  "sourceMtime": 1786695291,
+  "sourceSize": 72,
+  "converterVersion": 1,
+  "nxVersion": "NX 2512",
+  "componentCount": 1,
+  "bodyCount": 1,
+  "triangleCount": 12,
+  "boundingBox": {
+    "min": [
+      -60,
+      -40,
+      -1
+    ],
+    "max": [
+      60,
+      40,
+      1
+    ],
+    "size": [
+      120,
+      80,
+      2
+    ]
+  },
+  "assemblyTree": {
+    "id": "node_sheet",
+    "name": "sheet",
+    "nxId": null,
+    "type": "body",
+    "transform": null,
+    "visible": true,
+    "color": null,
+    "material": "Sheet POM",
+    "density": null,
+    "mass": null,
+    "children": [],
+    "meshIndex": 0
+  }
+}

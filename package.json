@@ -1,0 +1,35 @@
+{
+  "name": "obsidian-cad-preview",
+  "version": "1.0.0",
+  "description": "Embedded 3D CAD viewer for Siemens NX PRT, STEP, and JT files in Obsidian notes",
+  "main": "main.js",
+  "scripts": {
+    "dev": "node esbuild.config.mjs",
+    "build": "node esbuild.config.mjs production"
+  },
+  "keywords": [
+    "obsidian",
+    "obsidian-plugin",
+    "cad",
+    "siemens-nx",
+    "prt",
+    "step",
+    "jt",
+    "threejs",
+    "webgl",
+    "3d"
+  ],
+  "author": "Antigravity",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/three": "^0.170.0",
+    "esbuild": "^0.24.0",
+    "obsidian": "latest",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  }
+}

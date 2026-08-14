@@ -1,0 +1,44 @@
+{
+  "source": "cube.prt",
+  "format": "prt",
+  "units": "mm",
+  "generatedAt": "2026-08-14T08:40:14.9212957Z",
+  "sourceMtime": 1786696814,
+  "sourceSize": 71,
+  "converterVersion": 1,
+  "nxVersion": "NX 2512",
+  "componentCount": 1,
+  "bodyCount": 1,
+  "triangleCount": 12,
+  "boundingBox": {
+    "min": [
+      -30,
+      -20,
+      -15
+    ],
+    "max": [
+      30,
+      20,
+      15
+    ],
+    "size": [
+      60,
+      40,
+      30
+    ]
+  },
+  "assemblyTree": {
+    "id": "node_root",
+    "name": "cube",
+    "nxId": null,
+    "type": "body",
+    "transform": null,
+    "visible": true,
+    "color": null,
+    "material": "Steel 316L",
+    "density": null,
+    "mass": 0.56,
+    "children": [],
+    "meshIndex": 0
+  }
+}

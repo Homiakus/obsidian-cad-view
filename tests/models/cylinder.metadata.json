@@ -1,0 +1,44 @@
+{
+  "source": "cylinder.prt",
+  "format": "prt",
+  "units": "mm",
+  "generatedAt": "2026-08-14T08:14:51.1760090Z",
+  "sourceMtime": 1786695291,
+  "sourceSize": 75,
+  "converterVersion": 1,
+  "nxVersion": "NX 2512",
+  "componentCount": 1,
+  "bodyCount": 1,
+  "triangleCount": 128,
+  "boundingBox": {
+    "min": [
+      -30,
+      -40,
+      -30
+    ],
+    "max": [
+      30,
+      40,
+      30
+    ],
+    "size": [
+      60,
+      80,
+      60
+    ]
+  },
+  "assemblyTree": {
+    "id": "node_cylinder",
+    "name": "cylinder",
+    "nxId": null,
+    "type": "body",
+    "transform": null,
+    "visible": true,
+    "color": null,
+    "material": "Aluminium 6061",
+    "density": null,
+    "mass": 0.38,
+    "children": [],
+    "meshIndex": 0
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "id": "obsidian-cad-preview",
+  "name": "CAD Preview (NX PRT, STEP, JT)",
+  "version": "1.0.0",
+  "minAppVersion": "0.15.0",
+  "description": "Embedded interactive 3D CAD viewer for Siemens NX PRT, STEP, and JT files with assembly tree, measurement, sectioning and caching.",
+  "author": "Antigravity",
+  "authorUrl": "https://github.com",
+  "isDesktopOnly": true
+}
